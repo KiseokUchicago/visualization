@@ -12,7 +12,10 @@ Welcome to my research website. My name is Kiseok Lee (E&E department of UChicag
 
 * [Data visualization lecture by Peter Carbonetto](visualization.html)
 
-Now, let's solve the challenge (team C. elegans)
+Now, let's solve the challenge Part B (team C. elegans)
+
+* [Challenge](vis_challenge_partB.html)
+
+Working on other challenge questions (team C. elegans)
 
 * [Challenge](Visualization_challenge.html)
-
