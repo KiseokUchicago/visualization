@@ -504,23 +504,27 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKiseokUchicagovisualizationtree3331f3981376bdbc1085c9147c553e20b651f727targetblank3331f39a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KiseokUchicago/visualization/tree/3331f3981376bdbc1085c9147c553e20b651f727" target="_blank">3331f39</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKiseokUchicagovisualizationtreebdb62f7b12443706274c615ac9d456110999da2ftargetblankbdb62f7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KiseokUchicago/visualization/tree/bdb62f7b12443706274c615ac9d456110999da2f" target="_blank">bdb62f7</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKiseokUchicagovisualizationtree3331f3981376bdbc1085c9147c553e20b651f727targetblank3331f39a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKiseokUchicagovisualizationtreebdb62f7b12443706274c615ac9d456110999da2ftargetblankbdb62f7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/KiseokUchicago/visualization/tree/3331f3981376bdbc1085c9147c553e20b651f727" target="_blank">3331f39</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/KiseokUchicago/visualization/tree/bdb62f7b12443706274c615ac9d456110999da2f" target="_blank">bdb62f7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  scatter_plot.pdf
 
 </code></pre>
 <p>
@@ -559,6 +563,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KiseokUchicago/visualization/blob/bdb62f7b12443706274c615ac9d456110999da2f/analysis/visualization.Rmd" target="_blank">bdb62f7</a>
+</td>
+<td>
+KiseokUchicago
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+updates
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KiseokUchicago/visualization/ed599f77a4e146ddbbd9bc40f393df7f06f78fc5/docs/visualization.html" target="_blank">ed599f7</a>
+</td>
+<td>
+KiseokUchicago
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -705,9 +743,63 @@ plot(dogs$weight,dogs$aod)</code></pre>
 <p><img src="figure/visualization.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
 # use ggplot2
-ggplot(dogs,aes_string(x = &quot;weight&quot;,y = &quot;aod&quot;)) +
-  geom_point()</code></pre>
+p1 &lt;- ggplot(dogs,aes_string(x = &quot;weight&quot;,y = &quot;aod&quot;)) +
+  geom_point()
+p1</code></pre>
 <p><img src="figure/visualization.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># some improvements
+library(cowplot)
+p2 &lt;- p1 + labs(x= &#39;body weight (lbs)&#39;, y= &#39;longevity (years)&#39;, title = &quot;Bigger dogs live less&quot;) + theme_cowplot()
+p2</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+# Surprising subtlety with colour.
+p4 &lt;- ggplot(dogs,aes_string(x = &quot;weight&quot;,y = &quot;aod&quot;, color = &#39;shortcoat&#39;)) + geom_point() + theme_cowplot()
+
+p4</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+# fix the plot to discrete value
+class(dogs$shortcoat)
+dogs$shortcoat &lt;- factor(dogs$shortcoat)
+summary(dogs$shortcoat)
+
+p4 &lt;- ggplot(dogs,aes_string(x = &quot;weight&quot;,y = &quot;aod&quot;, color = &#39;shortcoat&#39;)) + geom_point() + theme_cowplot()
+
+# voila!
+p4</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /> ## Add linear regression use colors() to see the list of colors</p>
+<pre class="r"><code>fit &lt;- lm(aod ~ weight,data=dogs)
+summary(fit)
+coef(fit)
+
+# compare the fit
+p5 &lt;- p4 + geom_abline(color=&#39;forestgreen&#39;, intercept = coef(fit)[1], slope=coef(fit)[2]) + geom_abline(intercept = 13, slope = -1/28, color = &#39;orange&#39;)
+
+p5</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+# add breed names
+library(ggrepel)
+p6 &lt;- p5 + geom_text_repel(mapping =aes_string(label = &#39;breed&#39;), color = &#39;darkblue&#39;)
+
+p6</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+# add only fraction of them
+p6 &lt;- p5 + geom_text_repel(mapping =aes_string(label = &#39;breed&#39;), color = &#39;darkblue&#39;, data=dogs[1:20,])
+
+p6</code></pre>
+<p><img src="figure/visualization.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+# Save the image to pdf
+# ggsave(&#39;scatter_plot.pdf&#39;,p6)</code></pre>
+</div>
+<div id="bonus-install-a-newer-version-of-ggrepel" class="section level2">
+<h2>Bonus: Install a newer version of ggrepel</h2>
+<pre class="r"><code># devtools::install_github(&#39;slowkow/ggrepel&#39;)
+# failed to install the newer version
+</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
