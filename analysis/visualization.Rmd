@@ -18,8 +18,7 @@ The main difference with Advanced Computing 1 is that we take a more in-depth lo
 and plotting strategies.
 
 ```{r knitr-options, echo=FALSE}
-knitr::opts_chunk$set(results = "hide",collapse = TRUE,
-                      fig.height = 3,fig.width = 3,fig.align = "center")
+knitr::opts_chunk$set(results = "hide",collapse = TRUE,fig.align = "center")
 ```
 
 ### Install libraries
@@ -53,6 +52,18 @@ unique(dogs$shortcoat)
 mean(dogs$shortcoat)
 mean(dogs$shortcoat, na.rm=TRUE)
 ```
+
+## Plotting
+```{r}
+# basic function
+plot(dogs$weight,dogs$aod)
+
+# use ggplot2
+ggplot(dogs,aes_string(x = "weight",y = "aod")) +
+  geom_point()
+
+```
+
 
 
 
