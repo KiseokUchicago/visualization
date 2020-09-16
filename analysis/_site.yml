@@ -1,7 +1,7 @@
-name: "Ggplot2_visualization"
+name: Ggplot2_visualization
 output_dir: ../docs
 navbar:
-  title: "Ggplot2_visualization"
+  title: Ggplot2_visualization
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/KiseokUchicago/visualization
 output:
   workflowr::wflow_html:
     toc: yes
