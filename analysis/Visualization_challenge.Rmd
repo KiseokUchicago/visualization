@@ -12,7 +12,117 @@ editor_options:
 Mapping the genetic basis of physiological and behavioral
 traits in outbred mice
 
+You are working in a lab studying studying the genetics of physiological and behavioral traits in mice. The lab has just completed a large study of mice from an outbred mouse population, “CFW” (“Carworth Farms White”). The aim of the study is to identify genetic contributors to variation in behaviour and musculoskeletal traits.
+
+# Part A: Exploratory analysis of muscle development and conditioned fear data
+
 ```{r}
+# load libraries
+library(ggplot2)
+library(cowplot)
+library(ggrepel)
+library(htmlwidgets)
+library(plotly)
+```
+
+
+```{r}
+# Import data
+# Import pheno.csv
+# Read the phenotype data from the CSV file. 
+pheno <- read.csv("data/pheno.csv",quote = "",check.names = FALSE,
+                  stringsAsFactors = FALSE)
+
+# Remove the data from the methamphetamine sensitivity testing, since
+# these data will not be used in the programming challenge. Also, most
+# of the data from the prepulse inhibition tests will not be used, so
+# we can remove those columns as well.
+pheno <- pheno[c(1:38,65:67)]
+
+# Convert some of the columns to factors.
+pheno <- transform(pheno,
+                   id            = as.character(id),
+                   round         = factor(round,paste0("SW",1:25)),
+                   FCbox         = factor(FCbox),
+                   PPIbox        = factor(PPIbox),
+                   methcage      = factor(methcage),
+                   methcycle     = factor(methcycle),
+                   discard       = factor(discard),
+                   mixup         = factor(mixup),
+                   earpunch      = factor(earpunch),
+                   abnormalbone  = factor(abnormalbone),
+                   experimenters = factor(experimenters))
+
+# Convert the "fasting glucose" column to double precision.
+pheno <- transform(pheno,fastglucose = as.double(fastglucose))
+
+# Remove rows marked as "discard" and as possible sample mixups.
+pheno <- subset(pheno,discard == "no" & mixup == "no")
+
+hmdp <- read.csv("data/hmdp.csv", stringsAsFactors = FALSE)
+gwscan <- read.csv("data/gwscan.csv", stringsAsFactors = FALSE)
+gwscan <- transform(gwscan, chr = factor(chr, 1:19))
+
+geno <- read.csv("data/geno_rs29477109.csv", stringsAsFactors = FALSE)
+geno <- transform(geno, id = as.character(id))
+
 
 ```
+
+## 1. Histogram: distribution of tibialis anterior (TA) muscle weight
+
+```{r}
+colnames(pheno)
+pheno$TA
+# table(pheno$TA)
+
+p_TA <- ggplot(pheno, aes_string(x='TA')) +
+  geom_histogram(fill='darkblue') +
+  labs(x= 'Muscle weight (mg)', y= 'Frequency', title = "Histogram") +
+  theme_cowplot()
+
+p_TA
+
+```
+The distribution is roughly normal. We see some outliers with small muscle weight.
+
+## 2. Scatterplot: Relationship between TA weight and tibia length.
+
+```{r}
+# linear model with all data
+fit <- lm(data=pheno, TA ~ tibia)
+coef(fit)
+
+# linear model without outliers
+# let's first detect outliers with box plot
+ggplot(pheno) +
+  aes_string(y ="TA") +
+  geom_boxplot(fill = "#0c4c8a") +
+  theme_cowplot()
+
+# Using the IQR criterion 
+# (https://towardsdatascience.com/outliers-detection-in-r-6c835f14e554)
+boxplot.stats(pheno$TA)$out
+
+# fit2 <- lm(da)
+
+p_sc <- ggplot(pheno,aes_string(x = "tibia",y = "TA")) +
+  geom_point(color='darkgrey') +
+  labs(x= 'Tibia length (mm)', y= 'Weight (mg)', title = "Histogram")+
+  geom_abline(color='forestgreen', intercept = coef(fit)[1], slope=coef(fit)[2]) + geom_abline(intercept = 13, slope = -1/28, color = 'orange')+
+  theme_cowplot()
+
+# green line is the linear model with all data
+# orange line is the linear model without outliers
+
+unique(pheno$TA)
+unique(pheno$tibia)
+# there are some NA values
+
+p_sc
+
+
+```
+
+
 

@@ -63,11 +63,64 @@ mean(dogs$shortcoat, na.rm=TRUE)
 plot(dogs$weight,dogs$aod)
 
 # use ggplot2
-ggplot(dogs,aes_string(x = "weight",y = "aod")) +
+p1 <- ggplot(dogs,aes_string(x = "weight",y = "aod")) +
   geom_point()
+p1
+# some improvements
+library(cowplot)
+p2 <- p1 + labs(x= 'body weight (lbs)', y= 'longevity (years)', title = "Bigger dogs live less") + theme_cowplot()
+p2
+
+# Surprising subtlety with colour.
+p4 <- ggplot(dogs,aes_string(x = "weight",y = "aod", color = 'shortcoat')) + geom_point() + theme_cowplot()
+
+p4
+
+# fix the plot to discrete value
+class(dogs$shortcoat)
+dogs$shortcoat <- factor(dogs$shortcoat)
+summary(dogs$shortcoat)
+
+p4 <- ggplot(dogs,aes_string(x = "weight",y = "aod", color = 'shortcoat')) + geom_point() + theme_cowplot()
+
+# voila!
+p4
+
+```
+## Add linear regression 
+use colors() to see the list of colors
+```{r}
+fit <- lm(aod ~ weight,data=dogs)
+summary(fit)
+coef(fit)
+
+# compare the fit
+p5 <- p4 + geom_abline(color='forestgreen', intercept = coef(fit)[1], slope=coef(fit)[2]) + geom_abline(intercept = 13, slope = -1/28, color = 'orange')
+
+p5
+
+# add breed names
+library(ggrepel)
+p6 <- p5 + geom_text_repel(mapping =aes_string(label = 'breed'), color = 'darkblue')
+
+p6
+
+# add only fraction of them
+p6 <- p5 + geom_text_repel(mapping =aes_string(label = 'breed'), color = 'darkblue', data=dogs[1:20,])
+
+p6
+
+# Save the image to pdf
+# ggsave('scatter_plot.pdf',p6)
 
 ```
 
+## Bonus: Install a newer version of ggrepel
+```{r}
+# devtools::install_github('slowkow/ggrepel')
+# failed to install the newer version
+
+```
 
 
 
