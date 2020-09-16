@@ -9,6 +9,8 @@ editor_options:
 
 ## Data visualization Challenge (C. elegans team)
 
+Mapping the genetic basis of physiological and behavioral
+traits in outbred mice
 
 ```{r}
 
