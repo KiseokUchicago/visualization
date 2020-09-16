@@ -1,0 +1,58 @@
+---
+title: "Data Visualization"
+author: "KiseokUchicago"
+date: "2020-09-16"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Data visualization lecture
+Peter Carbonetto
+
+In this lesson, you will use ggplot2 to create effective visualizations of data. The ggplot2 package
+is a powerful plotting interface that extends the base plotting functions in R. You will learn that
+creating effective visualizations hinges on good data preparation. (In reality, good data preparation
+can take days or weeks, but we can still illustrate some useful data preparation practices.)
+The main difference with Advanced Computing 1 is that we take a more in-depth look at ggplot2
+and plotting strategies.
+
+```{r knitr-options, echo=FALSE}
+knitr::opts_chunk$set(results = "hide",collapse = TRUE,
+                      fig.height = 3,fig.width = 3,fig.align = "center")
+```
+
+### Install libraries
+```{r}
+# install.packages("ggplot2")
+# install.packages("cowplot")
+# install.packages("ggrepel")
+# install.packages("htmlwidgets")
+# install.packages("plotly")
+library(ggplot2)
+library(cowplot)
+library(ggrepel)
+library(htmlwidgets)
+library(plotly)
+
+```
+
+# Exercize 1: Do smaller dogs live longer?
+
+## Import and explore the data
+```{r}
+# Import data
+dogs <- read.csv("data/dogs.csv",stringsAsFactors = FALSE)
+head(dogs)
+colnames(dogs)
+summary(dogs)
+str(dogs)
+
+# Let’s take a closer look at the shortcoat column:
+unique(dogs$shortcoat)
+mean(dogs$shortcoat)
+mean(dogs$shortcoat, na.rm=TRUE)
+```
+
+
+
