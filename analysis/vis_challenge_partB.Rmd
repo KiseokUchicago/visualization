@@ -1,20 +1,11 @@
 ---
-title: "Visualization_challenge"
+title: "Visualization_challenge_partB"
 author: "KiseokUchicago"
 date: "2020-09-16"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
-
-## Data visualization Challenge (C. elegans team)
-
-Mapping the genetic basis of physiological and behavioral
-traits in outbred mice
-
-You are working in a lab studying studying the genetics of physiological and behavioral traits in mice. The lab has just completed a large study of mice from an outbred mouse population, “CFW” (“Carworth Farms White”). The aim of the study is to identify genetic contributors to variation in behaviour and musculoskeletal traits.
-
-# Part A: Exploratory analysis of muscle development and conditioned fear data
 
 ```{r}
 # load libraries
@@ -65,82 +56,7 @@ gwscan <- transform(gwscan, chr = factor(chr, 1:19))
 
 geno <- read.csv("data/geno_rs29477109.csv", stringsAsFactors = FALSE)
 geno <- transform(geno, id = as.character(id))
-
-
 ```
-
-## 1. Histogram: distribution of tibialis anterior (TA) muscle weight
-
-```{r}
-colnames(pheno)
-pheno$TA
-# table(pheno$TA)
-
-p_TA <- ggplot(pheno, aes_string(x='TA')) +
-  geom_histogram(fill='darkblue') +
-  labs(x= 'Muscle weight (mg)', y= 'Frequency', title = "Histogram") +
-  theme_cowplot()
-
-p_TA
-
-```
-The distribution is roughly normal. We see some outliers with small muscle weight.
-
-## 2. Scatterplot: Relationship between TA weight and tibia length.
-
-```{r}
-# linear model with all data
-fit <- lm(data=pheno, TA ~ tibia)
-coef(fit)
-
-# linear model without outliers
-# let's first detect outliers with box plot
-ggplot(pheno) +
-  aes_string(y ="TA") +
-  geom_boxplot(fill = "#0c4c8a") +
-  theme_cowplot()
-
-# Using the IQR criterion 
-# (https://towardsdatascience.com/outliers-detection-in-r-6c835f14e554)
-out_TA <- boxplot.stats(pheno$TA)$out
-out_tibia <- boxplot.stats(pheno$tibia)$out
-
-pheno_excluding_out <- pheno[which(!(pheno$TA %in% c(out_TA))),]
-
-# excluded weight outliers
-ggplot(pheno_excluding_out) +
-  aes_string(y ="TA") +
-  geom_boxplot(fill = "#0c4c8a") +
-  theme_cowplot()
-
-out_tibia <- boxplot.stats(pheno_excluding_out$tibia)$out
-pheno_excluding_out2 <- pheno_excluding_out[which(!(pheno_excluding_out$tibia %in% c(out_tibia))),]
-
-# excluded tibia outliers
-ggplot(pheno_excluding_out2) +
-  aes_string(y ="tibia") +
-  geom_boxplot(fill = "#0c4c8a") +
-  theme_cowplot()
-
-fit2 <- lm(data=pheno_excluding_out2, TA ~ tibia)
-coef(fit2)
-
-p_sc <- ggplot(pheno,aes_string(x = "tibia",y = "TA")) +
-  geom_point(color='darkgrey') +
-  labs(x= 'Tibia length (mm)', y= 'Weight (mg)')+
-  geom_abline(color='forestgreen', intercept = coef(fit)[1], slope=coef(fit)[2]) +
-  geom_abline(color='orange', intercept = coef(fit2)[1], slope=coef(fit2)[2]) +
-  theme_cowplot()
-
-# green line is the linear model with all data
-# orange line is the linear model without outliers
-
-p_sc
-```
-
-## 3.“Conditioned Fear” test.
-
-
 
 
 # Part B
@@ -185,10 +101,5 @@ plot_grid(
   p_bmd, p_bmd2,
   labels = "AUTO", ncol = 1
 )
-``````
-
-
-
-
-
+```
 
